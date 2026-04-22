@@ -6,9 +6,10 @@ from q_learning import train, env, get_best_action
 
 pygame.init()
 
-WIDTH, HEIGHT = 600, 750
+WIDTH, HEIGHT = 600, 850
 FLOORS = 5
-FLOOR_HEIGHT = HEIGHT // FLOORS
+HEADER_HEIGHT = 100
+FLOOR_HEIGHT = (HEIGHT - HEADER_HEIGHT) // FLOORS
 
 # Setup screen
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -53,12 +54,12 @@ def draw_environment(elevator_y, waiting_people, inside_people, doors_open):
     # building structure
     building_width = 300
     building_x = WIDTH // 2 - building_width // 2
-    pygame.draw.rect(screen, (200, 210, 225), (building_x, 0, building_width, HEIGHT))
+    pygame.draw.rect(screen, (200, 210, 225), (building_x, HEADER_HEIGHT, building_width, HEIGHT - HEADER_HEIGHT))
     
     # elevator shaft
     shaft_w = 120
     shaft_x = WIDTH // 2 - shaft_w // 2
-    pygame.draw.rect(screen, (40, 40, 50), (shaft_x, 0, shaft_w, HEIGHT))
+    pygame.draw.rect(screen, (40, 40, 50), (shaft_x, HEADER_HEIGHT, shaft_w, HEIGHT - HEADER_HEIGHT))
     
     # floors and waiting persons
     for i in range(FLOORS):
@@ -109,9 +110,9 @@ def draw_environment(elevator_y, waiting_people, inside_people, doors_open):
                          (elevator_x + cabin_w//2, elevator_y + FLOOR_HEIGHT - 5), 3)
                          
     # Top Information Panel
-    panel_rect = pygame.Rect(15, 15, 260, 90)
-    pygame.draw.rect(screen, (255, 255, 255), panel_rect, border_radius=8)
-    pygame.draw.rect(screen, (100, 150, 200), panel_rect, 3, border_radius=8)
+    panel_rect = pygame.Rect(0, 0, WIDTH, HEADER_HEIGHT)
+    pygame.draw.rect(screen, (255, 255, 255), panel_rect)
+    pygame.draw.line(screen, (100, 150, 200), (0, HEADER_HEIGHT), (WIDTH, HEADER_HEIGHT), 4)
     
     # Summary of stats
     wait_count = len(waiting_people)
@@ -121,9 +122,9 @@ def draw_environment(elevator_y, waiting_people, inside_people, doors_open):
     line2 = small_font.render(f"In Lift: {inside_count} people", True, (20, 20, 20))
     status_text = small_font.render("Status: " + ("Doors Open" if doors_open else "Moving"), True, (40, 100, 180))
     
-    screen.blit(line1, (25, 20))
-    screen.blit(line2, (25, 45))
-    screen.blit(status_text, (25, 70))
+    screen.blit(line1, (30, HEADER_HEIGHT // 2 - 10))
+    screen.blit(line2, (230, HEADER_HEIGHT // 2 - 10))
+    screen.blit(status_text, (410, HEADER_HEIGHT // 2 - 10))
 
     pygame.display.flip()
 
